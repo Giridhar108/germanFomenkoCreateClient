@@ -1,17 +1,32 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
-    <title><%= htmlWebpackPlugin.options.title %></title>
+    <link rel="stylesheet" href="../src/assets/styles/main.css">
+
+    <title>Новый клиент</title>
   </head>
   <body>
-    <noscript>
-      <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
-    </noscript>
-    <div id="app"></div>
+    <header class="header">
+      <div class="container">
+      <div class="wrapper ">
+        <div class="logo">
+          <h1 class="logo__medods">MEDODS</h1>
+          <p class="logo__med">медицина</p>
+        </div>
+        <div class="newClient">
+          <p>Новый клиент</p>
+        </div>
+      </div>
+    </div>
+    </header>
+    <section class="container">
+      <div id="app"></div>
+
+    </section>
     <!-- built files will be auto injected -->
   </body>
 </html>

@@ -1,28 +1,96 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <sign-up />
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue';
+import SignUp from './components/CreateClient.vue';
 
 export default {
   name: 'App',
   components: {
-    HelloWorld,
+    SignUp,
   },
 };
 </script>
 
 <style lang="scss">
+*, ::after, ::before {
+    box-sizing: border-box;
+}
+html {
+  font-family: "Istok Web", sans-serif;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 18px;
+  line-height: 26px;
+  color: #414141;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  margin: 0;
+}
+p {
+  margin: 0;
+}
+body {
+  margin: 0;
+  background-color: #fffbf0;
+}
+
+.container {
+  max-width: 1250px;
+  margin: 0 auto;
+  padding: 0 15px;
+}
+
+.header {
+  background-color: #007a88;
+  text-align: center;
+}
+.wrapper {
+  display: flex;
+  justify-content: space-between;
+  text-align: center;
+  align-items: center;
+  margin: 0 auto;
+  height: 70px;
+  max-width: 1080px;
+  color: #ffffff;
+}
+.logo {
+  &__medods {
+    font-weight: bold;
+    font-size: 28px;
+    line-height: 40px;
+  }
+  &__med {
+    position: relative;
+    top: -10px;
+    font-weight: normal;
+    font-size: 20px;
+    line-height: 29px;
+  }
+}
+.newClient {
+  font-weight: bold;
+  font-size: 28px;
+  line-height: 40px;
+}
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: Istok Web, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  margin-top: 40px;
+}
+
+@media (max-width: 1145px) {
+  .wrapper {
+    padding: 0 15px;
+  }
 }
 </style>
