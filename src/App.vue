@@ -34,6 +34,9 @@ h3,
 h4 {
   margin: 0;
 }
+h3 {
+  font-size: 18px;
+}
 p {
   margin: 0;
 }
@@ -85,12 +88,22 @@ body {
   font-family: Istok Web, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  margin-top: 40px;
+  margin-top: 65px;
 }
 
 @media (max-width: 1145px) {
   .wrapper {
     padding: 0 15px;
+  }
+}
+@media (max-width: 460px) {
+  .wrapper {
+    padding: 0 ;
+  }
+  .newClient{
+    margin-left: 15px;
+    font-size: 20px;
+    line-height: 20px;
   }
 }
 </style>

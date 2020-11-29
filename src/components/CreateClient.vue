@@ -1,139 +1,335 @@
 <template>
-  <form class="sign-up" @submit.prevent="checkForm">
-    <div class="main-inf">
+  <form v-if="!registrationPassed" class="sign-up" @submit.prevent="checkForm">
+    <div class="main main-inf">
       <div class="form">
-        <label class="form__label" for="main-inf">Лечащий врач</label>
-        <select class="form__control form__select">
-          <option>Apples</option>
-          <option>Apples</option>
-          <option>Apples</option>
+        <label class="form__label" for="healers">Лечащий врач</label>
+        <select
+          id="healers"
+          class="form__control form__select"
+          v-model="form.healers"
+        >
+          <option
+            v-for="(healer, index) in healers"
+            :value="healer.value"
+            :key="index"
+          >
+            {{ healer.label }}
+          </option>
         </select>
 
         <div class="form__main">
-          <div class="form__top">
-            <label class="form__label" for="">Фамилия*</label>
-            <input id="login" class="form__control" placeholder="Фамилия" />
+          <div class="form__top form__top-margin">
+            <label class="form__label" for="surname">Фамилия*</label>
+            <input
+              id="surname"
+              class="form__control"
+              :class="$v.form.surname.$error ? 'is-invalid' : ''"
+              v-model.trim="form.surname"
+              placeholder="Фамилия"
+            />
+            <p
+              v-if="$v.form.surname.$dirty && !$v.form.surname.required"
+              class="invalid-feedback"
+            >
+              Обязательное поле
+            </p>
           </div>
           <div class="form__top">
-            <label class="form__label" for="">Имя*</label>
-            <input id="login" class="form__control" placeholder="Имя" />
+            <label class="form__label" for="name">Имя*</label>
+            <input
+              id="name"
+              class="form__control"
+              :class="$v.form.name.$error ? 'is-invalid' : ''"
+              v-model.trim="form.name"
+              placeholder="Имя"
+            />
+            <p
+              v-if="$v.form.name.$dirty && !$v.form.name.required"
+              class="invalid-feedback"
+            >
+              Обязательное поле
+            </p>
           </div>
           <div class="form__top">
-            <label class="form__label" for="">Отчество</label>
-            <input id="login" class="form__control" placeholder="Отчество" />
+            <label class="form__label" for="patronymic">Отчество</label>
+            <input
+              id="patronymic"
+              class="form__control"
+              v-model.trim="form.patronymic"
+              placeholder="Отчество"
+            />
           </div>
           <div class="form__top">
             <label class="form__label" for="">Дата рождения*</label>
             <input
-              id="login"
+              id="birthday"
+              type="date"
               class="form__control"
+              :class="$v.form.birthday.$error ? 'is-invalid' : ''"
+              v-model.trim="form.birthday"
               placeholder="Дата рождения"
             />
+            <p
+              v-if="$v.form.birthday.$dirty && !$v.form.birthday.required"
+              class="invalid-feedback"
+            >
+              Обязательное поле
+            </p>
           </div>
           <div class="form__top">
-            <label class="form__label" for="">Пол</label>
-            <input id="login" class="form__control" placeholder="Пол" />
+            <label class="form__label" for="sex">Пол</label>
+            <input
+              id="sex"
+              class="form__control"
+              v-model.trim="form.sex"
+              placeholder="Пол"
+            />
           </div>
         </div>
       </div>
     </div>
 
-    <div class="main-passport">
+    <div class="main main-passport">
       <div class="form-group">
-        <label for="">Паспорт</label>
+        <h3>Паспорт</h3>
+        <div class="form__main">
+          <div class="form__top">
+            <label class="form__label" for="typeDoc">Тип документа*</label>
+            <select
+              id="typeDoc"
+              v-model="form.typeDoc"
+              class="form__control"
+              :class="$v.form.typeDoc.$error ? 'is-invalid' : ''"
+            >
+              <option
+                v-for="(type, index) in typeDoc"
+                :value="type.value"
+                :key="index"
+              >
+                {{ type.label }}
+              </option>
+            </select>
+            <p
+              v-if="$v.form.typeDoc.$dirty && !$v.form.typeDoc.required"
+              class="invalid-feedback"
+            >
+              Обязательное поле
+            </p>
+          </div>
+
+          <div class="form__top">
+            <label class="form__label" for="seriesPass">Серия</label>
+            <input
+              id="seriesPass"
+              class="form__control"
+              :class="$v.form.seriesPass.$error ? 'is-invalid' : ''"
+              v-model.trim="form.seriesPass"
+              placeholder="Серия"
+            />
+            <p
+              v-if="$v.form.seriesPass.$dirty && !$v.form.seriesPass.minLength"
+              class="invalid-feedback"
+            >
+              Здесь должно быть больше 4-х цифр
+            </p>
+            <p
+              v-if="
+                $v.form.seriesPass.$dirty && !$v.form.seriesPass.onlyNumbers
+              "
+              class="invalid-feedback"
+            >
+              Только цифры
+            </p>
+          </div>
+
+          <div class="form__top">
+            <label class="form__label" for="numberPass">Номер</label>
+            <input
+              id="numberPass"
+              class="form__control"
+              :class="$v.form.numberPass.$error ? 'is-invalid' : ''"
+              v-model.trim="form.numberPass"
+              placeholder="Номер"
+            />
+            <p
+              v-if="$v.form.numberPass.$dirty && !$v.form.numberPass.minLength"
+              class="invalid-feedback"
+            >
+              Здесь должно быть больше 6-и цифр
+            </p>
+            <p
+              v-if="
+                $v.form.numberPass.$dirty &&
+                !$v.form.numberPass.onlyNumbers &&
+                $v.form.numberPass.minLength
+              "
+              class="invalid-feedback"
+            >
+              Только цифры
+            </p>
+          </div>
+
+          <div class="form__top">
+            <label class="form__label" for="whoGet">Кем выдан*</label>
+            <input
+              id="whoGet"
+              class="form__control"
+              :class="$v.form.whoGet.$error ? 'is-invalid' : ''"
+              v-model.trim="form.whoGet"
+              placeholder="Кем выдан"
+            />
+            <p
+              v-if="$v.form.whoGet.$dirty && !$v.form.whoGet.required"
+              class="invalid-feedback"
+            >
+              Обязательное поле
+            </p>
+          </div>
+          <div class="form__top">
+            <label class="form__label" for="dateGet">Дата выдачи*</label>
+            <input
+              id="dateGet"
+              type="date"
+              class="form__control"
+              :class="$v.form.dateGet.$error ? 'is-invalid' : ''"
+              v-model.trim="form.dateGet"
+              placeholder="Дата выдачи"
+            />
+            <p
+              v-if="$v.form.dateGet.$dirty && !$v.form.dateGet.required"
+              class="invalid-feedback"
+            >
+              Обязательное поле
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="main main-adress">
+      <div class="form-group">
+        <h3>Адрес</h3>
 
         <div class="form__main">
           <div class="form__top">
-            <label class="form__label" for="">Тип документа*</label>
+            <label class="form__label" for="country">Страна</label>
             <input
-              id="login"
+              id="country"
               class="form__control"
-              placeholder="Тип документа"
+              v-model.trim="form.country"
+              placeholder="Страна"
             />
           </div>
           <div class="form__top">
-            <label class="form__label" for="">Серия</label>
-            <input id="login" class="form__control" placeholder="Серия" />
+            <label class="form__label" for="region">Область</label>
+            <input
+              id="region"
+              class="form__control"
+              v-model.trim="form.region"
+              placeholder="Область"
+            />
           </div>
           <div class="form__top">
-            <label class="form__label" for="">Номер</label>
-            <input id="login" class="form__control" placeholder="Номер" />
+            <label class="form__label" for="city">Город</label>
+            <input
+              id="city"
+              class="form__control"
+              v-model.trim="form.city"
+              placeholder="Город"
+            />
           </div>
           <div class="form__top">
-            <label class="form__label" for="">Кем выдан*</label>
-            <input id="login" class="form__control" placeholder="Кем выдан" />
-          </div>
-          <div class="form__top">
-            <label class="form__label" for="">Дата выдачи*</label>
-            <input id="login" class="form__control" placeholder="Дата выдачи" />
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="main-adress">
-      <div class="form-group">
-        <label for="">Адрес</label>
-
-        <div class="form__main">
-          <div class="form__top">
-            <label class="form__label" for="">Страна</label>
-            <input id="login" class="form__control" placeholder="Страна" />
-          </div>
-          <div class="form__top">
-            <label class="form__label" for="">Область</label>
-            <input id="login" class="form__control" placeholder="Область" />
-          </div>
-          <div class="form__top">
-            <label class="form__label" for="">Город</label>
-            <input id="login" class="form__control" placeholder="Город" />
-          </div>
-          <div class="form__top">
-            <label class="form__label" for="">Улица</label>
-            <input id="login" class="form__control" placeholder="Улица" />
+            <label class="form__label" for="street">Улица</label>
+            <input
+              id="street"
+              class="form__control"
+              v-model.trim="form.street"
+              placeholder="Улица"
+            />
           </div>
 
           <div class="form__top form__top-index">
             <div>
-              <label class="form__label-index" for="">Индекс</label>
+              <label class="form__label-index" for="index">Индекс</label>
               <input
-                id="login"
+                id="index"
                 class="form__control index"
+                :class="$v.form.index.$error ? 'is-invalid' : ''"
+                v-model.trim="form.index"
                 placeholder="Индекс"
               />
+              <p
+                v-if="$v.form.index.$dirty && !$v.form.index.onlyNumbers"
+                class="invalid-feedback"
+              >
+                Только цифры
+              </p>
             </div>
             <div>
-              <label class="form__label-index" for="">Дом</label>
-              <input id="login" class="form__control index" placeholder="Дом" />
+              <label class="form__label-index" for="homeNumber">Дом</label>
+              <input
+                id="homeNumber"
+                class="form__control index"
+                v-model.trim="form.homeNumber"
+                placeholder="Дом"
+              />
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="main-create">
+    <div class="main main-create">
       <div class="form-group">
         <div class="form__main">
           <div class="form__top">
-            <label class="form__label" for="">Номер телефона*</label>
+            <label class="form__label" for="phoneNumber">Номер телефона*</label>
             <input
-              id="login"
+              id="phoneNumber"
               class="form__control"
-              placeholder="+7 (___) __ __ ___"
+              :class="$v.form.phoneNumber.$error ? 'is-invalid' : ''"
+              v-model.trim="form.phoneNumber"
+              placeholder="+7"
             />
+            <p
+              v-if="$v.form.phoneNumber.$dirty && !$v.form.phoneNumber.required"
+              class="invalid-feedback"
+            >
+              Обязательное поле
+            </p>
+            <p
+              v-if="
+                $v.form.phoneNumber.$dirty &&
+                !$v.form.phoneNumber.valid &&
+                $v.form.phoneNumber.required
+              "
+              class="invalid-feedback"
+            >
+              Не правильный номер
+            </p>
           </div>
 
           <div class="form__top">
-            <label class="form__label" for="">Группа клиентов*</label>
+            <label class="form__label" for="groupClient"
+              >Группа клиентов*</label
+            >
             <select
-              id="groups"
+              id="groupClient"
               class="form__control form__select-group"
+              :class="$v.form.groupClient.$error ? 'is-invalid' : ''"
+              v-model.trim="form.groupClient"
               multiple
             >
               <option>VIP</option>
               <option>Проблемные</option>
               <option>ОМС</option>
             </select>
+            <p
+              v-if="$v.form.groupClient.$dirty && !$v.form.groupClient.required"
+              class="invalid-feedback"
+            >
+              Обязательное поле
+            </p>
           </div>
 
           <div class="form__btn-bottom">
@@ -147,26 +343,113 @@
                 value="male"
                 name="checkbox"
                 id="notification"
+                v-model="form.sms"
               />
             </div>
             <button type="submit" class="btn btn-primary">
               Создать клиента
             </button>
           </div>
-
         </div>
       </div>
     </div>
   </form>
+  <div v-else class="success">
+    <p>Поздравляем!</p>
+    <p>{{ `Клиент ${form.name} ${form.surname}` }}</p>
+    <p>успешно зарегистрирован!</p>
+  </div>
 </template>
 
 <script>
-// import { validationMixin } from 'vuelidate';
-// import { required, minLength, email } from 'vuelidate/lib/validators';
+import { validationMixin } from 'vuelidate';
+import { required, minLength } from 'vuelidate/lib/validators';
+import onlyNumbers from '../utils/onlyNumbers';
+import validPhone from '../utils/validPhone';
 
 export default {
-  // mixins: [validationMixin],
-  data() {},
+  mixins: [validationMixin],
+  data() {
+    return {
+      registrationPassed: false,
+      form: {
+        surname: '',
+        name: '',
+        patronymic: '',
+        birthday: '',
+        sex: '',
+        typeDoc: '',
+        seriesPass: '',
+        numberPass: '',
+        whoGet: '',
+        dateGet: '',
+        country: '',
+        region: '',
+        city: '',
+        street: '',
+        index: '',
+        homeNumber: '',
+        phoneNumber: '',
+        groupClient: [],
+        sms: false,
+      },
+      healers: [
+        {
+          label: '',
+          value: '',
+        },
+        {
+          label: 'Иванов',
+          value: 'Ivanov',
+        },
+        {
+          label: 'Захаров',
+          value: 'Zaharov',
+        },
+        {
+          label: 'Чернышева',
+          value: 'Chernishova',
+        },
+      ],
+      typeDoc: [
+        {
+          label: 'Паспорт',
+          value: 'The passport',
+        },
+        {
+          label: 'Свидетельство о рождении',
+          value: 'Birth certificate',
+        },
+        {
+          label: 'Вод. удостоверение',
+          value: "Driver's license",
+        },
+      ],
+    };
+  },
+  validations: {
+    form: {
+      surname: { required },
+      name: { required },
+      birthday: { required },
+      typeDoc: { required },
+      seriesPass: { onlyNumbers, minLength: minLength(4) },
+      numberPass: { onlyNumbers, minLength: minLength(6) },
+      whoGet: { required },
+      dateGet: { required },
+      phoneNumber: { validPhone, required },
+      groupClient: { required },
+      index: { onlyNumbers },
+    },
+  },
+  methods: {
+    checkForm() {
+      this.$v.form.$touch();
+      if (!this.$v.form.$error) {
+        this.registrationPassed = true;
+      }
+    },
+  },
 };
 </script>
 
@@ -178,6 +461,9 @@ export default {
 .sign-up {
   display: flex;
   justify-content: space-around;
+}
+.main {
+  margin: 0 15px;
 }
 .main-passport,
 .main-adress {
@@ -193,11 +479,13 @@ export default {
     font-size: 16px;
   }
   &__control {
+    display: flex;
+    align-items: center;
     margin-top: 8px;
     width: 200px;
     height: 35px;
     padding: 0 10px;
-    background: #e9d2c5;
+    background: #f8e3d7;
     box-shadow: inset 2px 4px 2px rgba(0, 0, 0, 0.25);
     border-radius: 8px;
     border: none;
@@ -206,12 +494,8 @@ export default {
     font-weight: bold;
     font-size: 18px;
     line-height: 21px;
-    display: flex;
-    align-items: center;
     color: #414141;
-    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
     &:focus {
-      border-color: #00d2c5;
       outline: 0;
       box-shadow: 0 0 0 2px #00d2c5, inset 2px 4px 2px rgba(0, 0, 0, 0.25);
     }
@@ -223,6 +507,9 @@ export default {
     margin-top: 40px;
   }
   &__top {
+    margin-top: 26px;
+  }
+  &__top-margin {
     margin-top: 16px;
   }
   &__top-index {
@@ -232,9 +519,15 @@ export default {
   &__select-group {
     height: auto;
     padding-top: 10px;
+    & option:checked {
+      background-color: #029288 !important;
+    }
   }
   &__btn-bottom {
-    margin-top: 120px;
+    margin-top: 150px;
+  }
+  &__checkbox {
+    box-shadow: inset 2px 2px 2px rgba(0, 0, 0, 0.25);
   }
 }
 
@@ -250,13 +543,42 @@ export default {
   background: #00d2c5;
   border-radius: 8px;
   border: none;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
   &:hover {
     background: #029288;
+  }
+  &:focus {
+    outline: 0;
+    box-shadow: 0 0 0 2px #00625c;
   }
 }
 
 .index {
   width: 79px;
   height: 35px;
+}
+.is-invalid {
+  box-shadow: 0 0 0 2px #d20000, inset 2px 4px 2px rgba(0, 0, 0, 0.25);
+}
+.invalid-feedback {
+  position: absolute;
+  font-size: 12px;
+  color: #d20000;
+}
+.success {
+  text-align: center;
+  line-height: 2;
+  font-weight: bold;
+  font-size: 24px;
+}
+@media (max-width: 950px) {
+  .sign-up {
+    flex-wrap: wrap;
+    margin-bottom: 40px;
+  }
+  .form__btn-bottom {
+    margin-top: 0;
+  }
 }
 </style>
