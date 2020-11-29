@@ -134,7 +134,9 @@
             </p>
             <p
               v-if="
-                $v.form.seriesPass.$dirty && !$v.form.seriesPass.onlyNumbers
+                $v.form.seriesPass.$dirty &&
+                !$v.form.seriesPass.onlyNumbers &&
+                $v.form.seriesPass.minLength
               "
               class="invalid-feedback"
             >
@@ -298,10 +300,8 @@
               Обязательное поле
             </p>
             <p
-              v-if="
-                $v.form.phoneNumber.$dirty &&
-                !$v.form.phoneNumber.valid &&
-                $v.form.phoneNumber.required
+              v-else-if="
+                $v.form.phoneNumber.$dirty && !$v.form.phoneNumber.validPhone
               "
               class="invalid-feedback"
             >
